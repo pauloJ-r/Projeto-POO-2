@@ -75,8 +75,35 @@ public class ContaPoupanca implements IConta {
 
     @Override
     public void emitirExtrato(Month mes, Integer ano) {
-        // Implementação do extrato
+        // Verifica se a lista de transações está vazia
+        if (transacoes.isEmpty()) {
+            System.out.println("Nenhuma transação encontrada.");
+            return;
+        }
+
+        System.out.println("Extrato da Conta Poupança");
+        System.out.println("Número da Conta: " + numero);
+        System.out.println("Data de Abertura: " + dataAbertura);
+        System.out.println("Período: " + mes + " " + ano);
+        System.out.println("-------------------------------");
+
+        // Variáveis para controlar a impressão das transações
+        boolean encontrouTransacoes = false;
+
+        for (Transacao transacao : transacoes) {
+            LocalDateTime dataTransacao = transacao.getDataEfetivacao();
+            if (dataTransacao.getMonth().equals(mes) && dataTransacao.getYear() == ano) {
+                encontrouTransacoes = true;
+                System.out.printf("Data: %s | Tipo: %s | Valor: %.2f | Saldo após transação: %.2f\n",
+                        dataTransacao, transacao.getTipo(), transacao.getValor(), saldo);
+            }
+        }
+
+        if (!encontrouTransacoes) {
+            System.out.println("Nenhuma transação encontrada para o período especificado.");
+        }
     }
+
 
     // Getters and Setters
 

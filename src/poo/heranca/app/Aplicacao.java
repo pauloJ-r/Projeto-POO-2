@@ -119,26 +119,28 @@ public class Aplicacao {
 
                 case 6:
                     // Criar Conta Poupança
-                	System.out.print("Digite o CPF do cliente: ");
+                    System.out.print("Digite o CPF do cliente: ");
                     cpfCliente = scanner.nextLine();
                     System.out.print("Digite o número da conta poupança: ");
                     String numContaPoupanca = scanner.nextLine();
+                    
                     IConta contaPoupanca = new ContaPoupanca(numContaPoupanca);
                     contaDAO.criarConta(cpfCliente, contaPoupanca);
-                    System.out.println("Conta poupança criada com sucesso!");
+                    
                     break;
-
 
                 case 7:
                     // Criar Conta Corrente
-                	 System.out.print("Digite o CPF do cliente: ");
-                	 cpfCliente = scanner.nextLine();
-                	 System.out.print("Digite o número da conta corrente: ");
-                	 String numContaCorrente = scanner.nextLine();
-                	 IConta contaCorrente = new ContaCorrente(numContaCorrente);
-                	 contaDAO.criarConta(cpfCliente, contaCorrente);
-                	 System.out.println("Conta corrente criada com sucesso!");
-                	 break;
+                    System.out.print("Digite o CPF do cliente: ");
+                    cpfCliente = scanner.nextLine();
+                    System.out.print("Digite o número da conta corrente: ");
+                    String numContaCorrente = scanner.nextLine();
+                    
+                    IConta contaCorrente = new ContaCorrente(numContaCorrente);
+                    contaDAO.criarConta(cpfCliente, contaCorrente);
+                    
+                 
+                    break;
 
                 case 8:
                     // Depositar
@@ -146,9 +148,12 @@ public class Aplicacao {
                     String numeroContaDeposito = scanner.nextLine();
                     System.out.print("Digite o valor para depósito: ");
                     double valorDeposito = scanner.nextDouble();
+
+                    // Realizar o depósito diretamente, deixando o tratamento para o DAO
                     contaDAO.depositar(numeroContaDeposito, valorDeposito);
-                    System.out.println("Depósito realizado com sucesso!");
+
                     break;
+
 
                 case 9:
                     // Sacar
@@ -156,9 +161,9 @@ public class Aplicacao {
                     String numeroContaSaque = scanner.nextLine();
                     System.out.print("Digite o valor para saque: ");
                     double valorSaque = scanner.nextDouble();
-                    contaDAO.sacar(numeroContaSaque, valorSaque);
-                    System.out.println("Saque realizado com sucesso!");
+                    contaDAO.sacar(numeroContaSaque, valorSaque);  
                     break;
+
 
                 case 10:
                     // Transferir
@@ -168,37 +173,53 @@ public class Aplicacao {
                     String contaDestino = scanner.nextLine();
                     System.out.print("Digite o valor para transferência: ");
                     double valorTransferencia = scanner.nextDouble();
-                    contaDAO.transferir(contaOrigem, contaDestino, valorTransferencia);
-                    System.out.println("Transferência realizada com sucesso!");
+                    scanner.nextLine(); // Consumir a nova linha após o double
+
+                    // Chama o método transferir e captura a mensagem
+                    String resultadoTransferencia = contaDAO.transferir(contaOrigem, contaDestino, valorTransferencia);
+                    System.out.println(resultadoTransferencia); // Exibe a mensagem de sucesso ou erro
                     break;
+
 
                 case 11:
                     // Consultar Saldo
                     System.out.print("Digite o número da conta para consultar saldo: ");
                     String numeroContaSaldo = scanner.nextLine();
-                    double saldo = contaDAO.consultarSaldo(numeroContaSaldo);
-                    System.out.println("Saldo: R$ " + saldo);
+                    // Chama o método de consulta de saldo, que deve lidar com mensagens
+                    contaDAO.consultarSaldo(numeroContaSaldo);
                     break;
+
+
 
                 case 12:
                     // Consultar Balanço
                     System.out.print("Digite o CPF para consultar balanço: ");
-                    cpfCliente1 = scanner.nextLine();
-                    double balanco = contaDAO.consultarBalanco(cpfCliente1);
-                    System.out.println("Balanço total: R$ " + balanco);
+                    String cpfCliente2 = scanner.nextLine();
+                    // Chama o método de consulta de balanço, que deve lidar com mensagens
+                    contaDAO.consultarBalanco(cpfCliente2);
                     break;
+
 
                 case 13:
                     // Consultar Extrato
-                    System.out.print("Digite o CPF do cliente: ");
-                    cpfCliente1 = scanner.nextLine();
+                    System.out.print("Digite o número da conta: ");
+                    String numeroConta = scanner.nextLine();
                     System.out.print("Digite o mês (MM): ");
                     String mes = scanner.nextLine();
                     System.out.print("Digite o ano (YYYY): ");
                     String ano = scanner.nextLine();
-                    String extrato = contaDAO.getExtrato(cpfCliente1, mes, ano);
-                    System.out.println("Extrato do cliente: \n" + extrato);
+                    
+                    // Obtendo o extrato
+                    String extrato = contaDAO.getExtrato(numeroConta, mes, ano);
+                    
+                    // Imprimindo o extrato
+                    if (extrato.isEmpty()) {
+                        System.out.println("Nenhum lançamento encontrado para o período especificado.");
+                    } else {
+                        System.out.println("Extrato da conta " + numeroConta + ": \n" + extrato);
+                    }
                     break;
+
 
                 case 14:
                     // Listar Contas por Cliente
@@ -222,7 +243,6 @@ public class Aplicacao {
                     System.out.print("Digite o número da conta para remover: ");
                     String numeroContaRemover = scanner.nextLine();
                     contaDAO.removerConta(cpfCliente11, numeroContaRemover);
-                    System.out.println("Conta removida com sucesso!");
                     break;
 
                 case 16:

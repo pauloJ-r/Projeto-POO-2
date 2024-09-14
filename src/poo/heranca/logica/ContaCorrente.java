@@ -78,9 +78,38 @@ public class ContaCorrente implements IConta {
 	}
 
 	@Override
-	public void emitirExtrato(Month mes, Integer year) {
-		// TODO Auto-generated method stub
-		
+	public void emitirExtrato(Month mes, Integer ano) {
+	    // Verifica se a lista de transações está vazia
+	    if (transacoes.isEmpty()) {
+	        System.out.println("Nenhuma transação encontrada.");
+	        return;
+	    }
+
+	    // Cabeçalho do extrato
+	    System.out.println("Extrato da Conta Corrente");
+	    System.out.println("Número da Conta: " + numero);
+	    System.out.println("Data de Abertura: " + dataAbertura);
+	    System.out.println("Período: " + mes + " " + ano);
+	    System.out.println("-------------------------------");
+
+	    // Variáveis para controlar a impressão das transações
+	    boolean encontrouTransacoes = false;
+
+	    // Itera sobre todas as transações
+	    for (Transacao transacao : transacoes) {
+	        // Verifica se a transação está no mês e ano especificados
+	        LocalDateTime dataTransacao = transacao.getDataEfetivacao();
+	        if (dataTransacao.getMonth().equals(mes) && dataTransacao.getYear() == ano) {
+	            encontrouTransacoes = true;
+	            System.out.printf("Data: %s | Tipo: %s | Valor: %.2f | Saldo após transação: %.2f\n",
+	                    dataTransacao, transacao.getTipo(), transacao.getValor(), saldo);
+	        }
+	    }
+
+	    // Caso não tenha encontrado transações no período
+	    if (!encontrouTransacoes) {
+	        System.out.println("Nenhuma transação encontrada para o período especificado.");
+	    }
 	}
 
 	public String getNumero() {
